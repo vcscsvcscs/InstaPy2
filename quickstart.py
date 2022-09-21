@@ -7,10 +7,11 @@ insta_password = ''
 
 # get an InstaPy session!
 # set headless_browser=True to run InstaPy in the background
-session = InstaPy(username=insta_username, password=insta_password)
+session = InstaPy(username=insta_username, password=insta_password,
+                headless_browser=True)
 
 with smart_run(session):
     session.like_by_tags([
         'objectivec',
         'python3'
-    ], amount=10)
+    ], amount=6)

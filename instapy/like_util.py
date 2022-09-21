@@ -12,6 +12,8 @@ from selenium.common.exceptions import (
 )
 from selenium.webdriver.common.by import By
 
+from instapy import browser
+
 # import InstaPy modules
 from .comment_util import open_comment_section
 from .constants import (
@@ -35,6 +37,7 @@ from .util import (
     get_action_delay,
     get_additional_data,
     get_number_of_posts,
+    get_shared_data,
     is_page_available,
     is_private_profile,
     update_activity,
@@ -141,11 +144,10 @@ def get_links_for_location(
         top_posts = []
     sleep(2)
 
+
+    web_address_navigator(browser, f'view-source:{location_link}?__a=1&__d=dis')
     try:
-        possible_posts = browser.execute_script(
-            "return window._sharedData.entry_data."
-            "LocationsPage[0].graphql.location.edge_location_to_media.count"
-        )
+        possible_posts = get_shared_data(browser)['data']['media_count']
 
     except WebDriverException:
         logger.info(
@@ -174,6 +176,8 @@ def get_links_for_location(
         # keeps counted for the location
 
     # Get links
+    web_address_navigator(browser, location_link)
+
     links = get_links(browser, location, logger, media, main_elem)
     filtered_links = len(links)
     try_again = 0
@@ -296,13 +300,12 @@ def get_links_for_tag(browser, tag, amount, skip_top_posts, randomize, media, lo
         top_posts = []
     sleep(2)
 
+    web_address_navigator(browser, f'view-source:{tag_link}?__a=1&__d=dis')
     try:
-        possible_posts = browser.execute_script(
-            "return window._sharedData.entry_data."
-            "TagPage[0].graphql.hashtag.edge_hashtag_to_media.count"
-        )
+        possible_posts = get_shared_data(browser)['data']['media_count']
 
     except WebDriverException:
+        web_address_navigator(browser, tag_link)
         try:
             possible_posts = browser.find_element(
                 By.XPATH, read_xpath(get_links_for_tag.__name__, "possible_post")

@@ -125,10 +125,11 @@ xpath["get_links_for_location"] = {
 
 xpath["get_links_from_feed"] = {"get_links": "//*[contains(@class,'c-Yi7')]"}
 
+# TODO: THIS NEEDS TO BE FIXED
 xpath["get_links_for_tag"] = {
-    "top_elements": "//main/article/div[1]",
-    "main_elem": "//main/article/div[2]",
-    "possible_post": "//span[contains(@class, 'g47SY')]",
+    "top_elements": "//main/article/div[1]/div[1]/div[1]",
+    "main_elem": "//main/article/div[1]/div[1]/div[1]/div[1]",
+    "possible_post": "//div[contains(@class, '_aabd _aa8k _aanf')]",
 }
 
 xpath["get_number_of_posts"] = {

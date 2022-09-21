@@ -2640,7 +2640,6 @@ def get_shared_data(browser):
     json_data = json.loads(browser.find_element(By.TAG_NAME, 'pre').text)
     if json_data:
         shared_data = json_data
-        print(shared_data['graphql']['user']['biography'])
     else:
         print('FAILED TO GET THE SHARED DATA')
     return shared_data
