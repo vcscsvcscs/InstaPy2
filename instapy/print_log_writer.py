@@ -1,7 +1,7 @@
 """Module only used to log the number of followers to a file"""
 from datetime import datetime
 
-from .util import interruption_handler, getUserData
+from .util import get_shared_data, interruption_handler
 from .util import web_address_navigator
 
 
@@ -15,10 +15,10 @@ def get_log_time():
 def log_follower_num(browser, username, logfolder):
     """Prints and logs the current number of followers to
     a separate file"""
-    user_link = "https://www.instagram.com/{}".format(username)
+    user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(username)
     web_address_navigator(browser, user_link)
 
-    followed_by = getUserData("graphql.user.edge_followed_by.count", browser)
+    followed_by = get_shared_data(browser)['graphql']['user']['edge_followed_by']['count']
 
     with open("{}followerNum.txt".format(logfolder), "a") as numFile:
         numFile.write("{:%Y-%m-%d %H:%M} {}\n".format(datetime.now(), followed_by or 0))
@@ -29,10 +29,10 @@ def log_follower_num(browser, username, logfolder):
 def log_following_num(browser, username, logfolder):
     """Prints and logs the current number of followers to
     a separate file"""
-    user_link = "https://www.instagram.com/{}".format(username)
+    user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(username)
     web_address_navigator(browser, user_link)
 
-    following_num = getUserData("graphql.user.edge_follow.count", browser)
+    following_num = get_shared_data(browser)['graphql']['user']['edge_follow']['count']
 
     with open("{}followingNum.txt".format(logfolder), "a") as numFile:
         numFile.write(

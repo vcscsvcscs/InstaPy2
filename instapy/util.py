@@ -37,6 +37,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
+# from instapy.unfollow_util import follow_through_dialog
+
 from .database_engine import get_database
 from .event import Event
 from .quota_supervisor import quota_supervisor
@@ -83,18 +85,18 @@ def is_private_profile(browser, logger, following=True):
 
         # Sometimes shared_data["entry_data"]["ProfilePage"][0] is empty, but get_additional_data()
         # fetches all data needed
-        get_key = shared_data.get("entry_data").get("ProfilePage")
+        get_key = shared_data.get('graphql').get('user')
 
         if get_key:
-            data = get_key[0]
+            data = get_key
         else:
             data = get_additional_data(browser)
     finally:
-        is_private = data["graphql"]["user"]["is_private"]
+        is_private = data["is_private"]
 
         logger.info(
             "Checked if '{}' is private, and it is: '{}'".format(
-                data["graphql"]["user"]["username"], is_private
+                data["username"], is_private
             )
         )
 
@@ -168,20 +170,14 @@ def validate_username(
         web_address_navigator(browser, link)
 
         try:
-            username = browser.execute_script(
-                "return window._sharedData.entry_data."
-                "PostPage[0].graphql.shortcode_media.owner.username"
-            )
+            username = get_shared_data(browser)['graphql']['user']['username']
 
         except WebDriverException:
             try:
                 browser.execute_script("location.reload()")
                 update_activity(browser, state=None)
 
-                username = browser.execute_script(
-                    "return window._sharedData.entry_data."
-                    "PostPage[0].graphql.shortcode_media.owner.username"
-                )
+                username = get_shared_data(browser)['graphql']['user']['username']
 
             except WebDriverException:
                 logger.error(
@@ -331,15 +327,13 @@ def validate_username(
                         return False, inap_msg
 
     if min_posts or max_posts or skip_private or skip_no_profile_pic or skip_business:
-        user_link = "https://www.instagram.com/{}/".format(username)
+        user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(username)
         web_address_navigator(browser, user_link)
 
     if min_posts or max_posts:
         # if you are interested in relationship number of posts boundaries
         try:
-            number_of_posts = getUserData(
-                "graphql.user.edge_owner_to_timeline_media.count", browser
-            )
+            number_of_posts = get_shared_data(browser)['graphql']['user']['edge_owner_to_timeline_media']['count']
 
             if max_posts:
                 if number_of_posts > max_posts:
@@ -367,7 +361,7 @@ def validate_username(
     # skip private
     if skip_private:
         try:
-            is_private = getUserData("graphql.user.is_private", browser)
+            is_private = get_shared_data(browser)['graphql']['user']['is_private']
 
             if is_private and (random.randint(0, 100) <= skip_private_percentage):
                 return False, "{} is private account, by default skip\n".format(
@@ -380,7 +374,7 @@ def validate_username(
     # skip public
     if skip_public:
         try:
-            is_public = not getUserData("graphql.user.is_private", browser)
+            is_public = not get_shared_data(browser)['graphql']['user']['is_private']
 
             if is_public and (random.randint(0, 100) <= skip_public_percentage):
                 return (
@@ -396,7 +390,7 @@ def validate_username(
     # skip no profile pic
     if skip_no_profile_pic:
         try:
-            profile_pic = getUserData("graphql.user.profile_pic_url", browser)
+            profile_pic = get_shared_data(browser)['graphql']['user']['profile_pic_url']
         except WebDriverException:
             logger.error("~cannot get the post profile pic url")
             return False, "--> Sorry, couldn't get if user profile pic url\n"
@@ -410,9 +404,7 @@ def validate_username(
     if skip_business or skip_non_business:
         # if is business account skip under conditions
         try:
-            is_business_account = getUserData(
-                "graphql.user.is_business_account", browser
-            )
+            is_business_account = get_shared_data(browser)['graphql']['user']['is_business_account']
         except WebDriverException:
             logger.error("~cannot get if user has business account active")
             return (
@@ -428,7 +420,7 @@ def validate_username(
 
         if is_business_account:
             try:
-                category = getUserData("graphql.user.business_category_name", browser)
+                category = get_shared_data(browser)['graphql']['user']['business_category_name']
             except WebDriverException:
                 logger.error("~cannot get category name for user")
                 return False, "--> Sorry, couldn't get category name for user\n"
@@ -462,12 +454,12 @@ def validate_username(
 
     if len(skip_bio_keyword) > 0 or len(mandatory_bio_keywords) > 0:
         # Navigate to the target user profile to read the Bio
-        user_link = "https://www.instagram.com/{}/".format(username)
+        user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(username)
         web_address_navigator(browser, user_link)
 
         # if contain stop words then skip
         try:
-            profile_bio = getUserData("graphql.user.biography", browser).lower()
+            profile_bio = get_shared_data(browser)['graphql']['user']['biography'].lower()
         except WebDriverException:
             logger.error("~cannot read '{}' bio".format(username))
             return False, "--> Sorry, couldn't get get user bio account active\n"
@@ -488,7 +480,8 @@ def validate_username(
     # if everything is ok
     return True, "Valid user"
 
-
+"""
+REMOVE OLD USER DATA
 def getUserData(
     query,
     browser,
@@ -498,10 +491,10 @@ def getUserData(
 
     # Sometimes shared_data["entry_data"]["ProfilePage"][0] is empty, but get_additional_data()
     # fetches all data needed
-    get_key = shared_data.get("entry_data").get("ProfilePage")
+    get_key = shared_data.get()
 
     if get_key:
-        data = get_key[0]
+        data = get_key
     else:
         data = get_additional_data(browser)
 
@@ -513,7 +506,7 @@ def getUserData(
             data = data[subobject]
 
     return data
-
+"""
 
 def getMediaData(
     query,
@@ -1148,9 +1141,7 @@ def username_url_to_username(username_url):
 def get_number_of_posts(browser):
     """Get the number of posts from the profile screen"""
     try:
-        num_of_posts = getUserData(
-            "graphql.user.edge_owner_to_timeline_media.count", browser
-        )
+        num_of_posts = get_shared_data(browser)['graphql']['user']['edge_owner_to_timeline_media']['count']
     except WebDriverException:
         try:
             num_of_posts_txt = browser.find_element(
@@ -1175,17 +1166,14 @@ def get_number_of_posts(browser):
 def get_relationship_counts(browser, username, logger):
     """Gets the followers & following counts of a given user"""
 
-    user_link = "https://www.instagram.com/{}/".format(username)
+    user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(username)
 
     # check URL of the webpage, if it already is user's profile page,
     # then do not navigate to it again
     web_address_navigator(browser, user_link)
 
     try:
-        followers_count = browser.execute_script(
-            "return window._sharedData.entry_data."
-            "ProfilePage[0].graphql.user.edge_followed_by.count"
-        )
+        followers_count = get_shared_data(browser)['graphql']['user']['edge_followed_by']['count']
 
     except WebDriverException:
         try:
@@ -1202,10 +1190,7 @@ def get_relationship_counts(browser, username, logger):
                 browser.execute_script("location.reload()")
                 update_activity(browser, state=None)
 
-                followers_count = browser.execute_script(
-                    "return window._sharedData.entry_data."
-                    "ProfilePage[0].graphql.user.edge_followed_by.count"
-                )
+                followers_count = get_shared_data(browser)['graphql']['user']['edge_followed_by']['count']
 
             except WebDriverException:
                 try:
@@ -1233,10 +1218,7 @@ def get_relationship_counts(browser, username, logger):
                     followers_count = None
 
     try:
-        following_count = browser.execute_script(
-            "return window._sharedData.entry_data."
-            "ProfilePage[0].graphql.user.edge_follow.count"
-        )
+        following_count = get_shared_data(browser)['graphql']['user']['edge_follow']['count']
 
     except WebDriverException:
         try:
@@ -1254,10 +1236,7 @@ def get_relationship_counts(browser, username, logger):
                 browser.execute_script("location.reload()")
                 update_activity(browser, state=None)
 
-                following_count = browser.execute_script(
-                    "return window._sharedData.entry_data."
-                    "ProfilePage[0].graphql.user.edge_follow.count"
-                )
+                following_count = get_shared_data(browser)['graphql']['user']['edge_follow']['count']
 
             except WebDriverException:
                 try:
@@ -2222,7 +2201,7 @@ def save_account_progress(browser, username, logger):
     followers, following = get_relationship_counts(browser, username, logger)
 
     # save profile total posts
-    posts = getUserData("graphql.user.edge_owner_to_timeline_media.count", browser)
+    posts = get_shared_data(browser)['graphql']['user']['edge_owner_to_timeline_media']['count']
 
     try:
         # DB instance
@@ -2262,10 +2241,10 @@ def get_epoch_time_diff(time_stamp, logger):
 def is_follow_me(browser, person=None):
     # navigate to profile page if not already in it
     if person:
-        user_link = "https://www.instagram.com/{}/".format(person)
+        user_link = "view-source:https://www.instagram.com/{}?__a=1&__d=dis".format(person)
         web_address_navigator(browser, user_link)
 
-    return getUserData("graphql.user.follows_viewer", browser)
+    return get_shared_data(browser)['graphql']['user']['follows_user']
 
 
 def get_users_from_dialog(old_data, dialog, logger):
@@ -2644,6 +2623,9 @@ def get_shared_data(browser):
     :param browser: The selenium webdriver instance
     :return shared_data: Json data from window._sharedData extracted from page source
     """
+
+
+    """
     shared_data = None
     soup = BeautifulSoup(browser.page_source, "html.parser")
     for text in soup(text=re.compile(r"window._sharedData")):
@@ -2651,4 +2633,14 @@ def get_shared_data(browser):
             shared_data = json.loads(re.search("{.*}", text).group())
             break
 
+    """
+
+    # test to get new shared data from another endpoint
+    shared_data = None
+    json_data = json.loads(browser.find_element(By.TAG_NAME, 'pre').text)
+    if json_data:
+        shared_data = json_data
+        print(shared_data['graphql']['user']['biography'])
+    else:
+        print('FAILED TO GET THE SHARED DATA')
     return shared_data
