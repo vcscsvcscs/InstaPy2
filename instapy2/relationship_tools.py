@@ -10,7 +10,7 @@ from datetime import datetime
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.common.by import By
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .follow_util import get_following_status
 from .time_util import sleep
 from .util import (

@@ -84,7 +84,7 @@ def set_workspace(path=None):
     else:
         message = (
             "Sorry! You can't change workspace after"
-            " InstaPy has started :>\t~using existing.."
+            " InstaPy2 has started :>\t~using existing.."
         )
         highlight_print(
             Settings.profile["name"], message, "workspace", "info", Settings.logger
@@ -117,7 +117,7 @@ def update_locations():
 
     # update database location
     if not Settings.database_location:
-        Settings.database_location = localize_path("db", "instapy.db")
+        Settings.database_location = localize_path("db", "instapy2.db")
 
 
 def get_home_path():
@@ -162,7 +162,7 @@ def remove_last_slash(path):
 
 
 def verify_workspace_name(path):
-    """Make sure chosen workspace name is InstaPy friendly"""
+    """Make sure chosen workspace name is InstaPy2 friendly"""
 
     path = slashen(path)
     path = remove_last_slash(path)

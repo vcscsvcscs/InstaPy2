@@ -29,7 +29,7 @@ except ModuleNotFoundError:
 # import exceptions
 from selenium.common.exceptions import NoSuchElementException
 
-# import InstaPy modules
+# import InstaPy2 modules
 from . import __version__
 from .browser import close_browser, set_selenium_local_session
 from .clarifai_util import check_image
@@ -104,7 +104,7 @@ from .util import (
 from .xpath import read_xpath
 
 
-class InstaPy:
+class InstaPy2:
     """Class to be instantiated to use the script"""
 
     def __init__(
@@ -132,7 +132,7 @@ class InstaPy:
         browser_executable_path: str = None,
         geckodriver_log_level: str = "info",  # "info" by default
     ):
-        print("InstaPy Version: {}".format(__version__))
+        print("InstaPy2 Version: {}".format(__version__))
         cli_args = parse_cli_args()
         username = cli_args.username or username
         password = cli_args.password or password
@@ -355,7 +355,7 @@ class InstaPy:
         if existing_logger is not None:
             return existing_logger
         else:
-            # initialize and setup logging system for the InstaPy object
+            # initialize and setup logging system for the InstaPy2 object
             logger = logging.getLogger(self.username)
             logger.setLevel(logging.DEBUG)
             # log name and format
@@ -421,7 +421,7 @@ class InstaPy:
 
     def login(self):
         """Used to login the user either with the username and password"""
-        # InstaPy uses page_delay speed to implicit wait for elements,
+        # InstaPy2 uses page_delay speed to implicit wait for elements,
         # here we're decreasing it to 5 seconds instead of the default 25
         # seconds to speed up the login process.
         #

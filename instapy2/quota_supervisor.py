@@ -79,7 +79,7 @@ def controller(job):
                 toast_notification(notify, "exit", job, interval)
 
                 logger.warning(
-                    "You're about to leave the session. " "InstaPy will exit soon!"
+                    "You're about to leave the session. " "InstaPy2 will exit soon!"
                 )
                 exit()
 
@@ -250,7 +250,7 @@ def send_message(job, action, interval, nap):
             message = (
                 "Quota Supervisor: daily {} reached quotient!"
                 "\t~going to sleep {} hours long\n"
-                "\ttime for InstaPy to take a big good nap :-)".format(
+                "\ttime for InstaPy2 to take a big good nap :-)".format(
                     job, "%.1f" % (nap / 60 / 60)
                 )
             )
@@ -293,7 +293,7 @@ def toast_notification(notify, alert, job, interval):
             notification.notify(
                 title="Quota Supervisor",
                 message=expr.format(label, interval),
-                app_name="InstaPy",
+                app_name="InstaPy2",
                 app_icon=icons[alert],
                 timeout=delay,
                 ticker="To switch supervising methods, please review "
@@ -312,7 +312,7 @@ def toast_notification(notify, alert, job, interval):
 def get_icons():
     """Return the locations of icons according to the operating system"""
     # get full location of icons folder inside package
-    icons_path = get_pkg_resource_path("instapy", "icons/")
+    icons_path = get_pkg_resource_path("instapy2", "icons/")
 
     windows_ico = [
         "Windows/qs_sleep_windows.ico",

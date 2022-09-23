@@ -2,4 +2,4 @@
 
 
 class InstaPyError(Exception):
-    """General error for InstaPy exceptions"""
+    """General error for InstaPy2 exceptions"""

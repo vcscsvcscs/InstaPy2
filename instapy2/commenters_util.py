@@ -17,7 +17,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .util import (
     click_element,
     close_dialog_box,

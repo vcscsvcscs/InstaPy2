@@ -11,7 +11,7 @@ from selenium.webdriver.common.by import By
 
 from .settings import Settings
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .util import (
     click_element,
     get_action_delay,

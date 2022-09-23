@@ -7,7 +7,7 @@ from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .util import (
     explicit_wait,
     get_username_from_id,
@@ -100,12 +100,12 @@ def verify_username_by_id(browser, username, person, person_id, logger, logfolde
     # try to find the user by ID
     person_id = load_user_id(username, person, logger, logfolder)
 
-    # if person_id is None, inform the InstaPy user that record does not exist
+    # if person_id is None, inform the InstaPy2 user that record does not exist
     if person_id not in [None, "unknown", "undefined"]:
         # get the [new] username of the user from the stored user ID
         person_new = get_username_from_id(browser, person_id, logger)
 
-        # if person_new is None, inform the InstaPy user that record does not exist
+        # if person_new is None, inform the InstaPy2 user that record does not exist
         if person_new is not None and person_new != person:
             logger.info(
                 "User '{}' has changed username and now is called '{}' :S".format(

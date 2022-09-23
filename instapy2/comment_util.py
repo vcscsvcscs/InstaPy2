@@ -18,7 +18,7 @@ from selenium.webdriver.common.keys import Keys
 from .event import Event
 from .quota_supervisor import quota_supervisor
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .time_util import sleep
 from .util import (
     add_user_to_blacklist,
@@ -377,7 +377,7 @@ def verify_commented_image(browser, link, owner, logger):
                 return True, message
 
     except NoSuchElementException:
-        # Cannot be determined if the post has been comment by InstaPy user,
+        # Cannot be determined if the post has been comment by InstaPy2 user,
         # and then it will not be commented until next loop, maybe comments
         # on the post have been limited. Return True, to emulate or assume the
         # post has been commented by user.
@@ -439,15 +439,15 @@ def process_comments(
 
     # smart commenting
     if comments and publish:
-        # Check if InstaPy already commented on this post, it could be the
+        # Check if InstaPy2 already commented on this post, it could be the
         # case that the image has been liked (manually) but not commented, so
         # we want to comment the post like usually we do.
         commented_image, message = verify_commented_image(browser, link, owner, logger)
 
         if commented_image:
-            # The post has already been commented, either manually or InstaPy
-            # Commenting twice by InstaPy user is not allowed by now or could
-            # not get comments on this post to check if InstaPy user commented
+            # The post has already been commented, either manually or InstaPy2
+            # Commenting twice by InstaPy2 user is not allowed by now or could
+            # not get comments on this post to check if InstaPy2 user commented
             # before, so will not comment until next check
             logger.info(message)
             return False

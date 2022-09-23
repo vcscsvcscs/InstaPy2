@@ -5,7 +5,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .util import update_activity
 
 LIKE_TAG_CLASS = "coreSpriteHeartOpen"

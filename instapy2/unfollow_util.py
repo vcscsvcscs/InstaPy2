@@ -28,7 +28,7 @@ from .print_log_writer import (
 from .quota_supervisor import quota_supervisor
 from .relationship_tools import get_followers, get_following, get_nonfollowers
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .time_util import sleep
 from .util import (
     add_user_to_blacklist,
@@ -60,7 +60,7 @@ def set_automated_followed_pool(
     delay_followbackers,
     pool="followedPool",
 ):
-    """Generate a user list based on the InstaPy followed usernames"""
+    """Generate a user list based on the InstaPy2 followed usernames"""
     pool_name = "{0}{1}_{2}.csv".format(logfolder, username, pool)
     automatedFollowedPool = {"all": {}, "eligible": {}}
     time_stamp = None
@@ -156,7 +156,7 @@ def unfollow(
     username,
     amount,
     customList,
-    InstapyFollowed,
+    InstaPyFollowed,
     nonFollowers,
     allFollowing,
     style,
@@ -198,16 +198,16 @@ def unfollow(
         customList = False
 
     if (
-        InstapyFollowed is not None
-        and isinstance(InstapyFollowed, (tuple, list))
-        and len(InstapyFollowed) == 2
-        and InstapyFollowed[0] is True
-        and InstapyFollowed[1] in ["all", "nonfollowers"]
+        InstaPyFollowed is not None
+        and isinstance(InstaPyFollowed, (tuple, list))
+        and len(InstaPyFollowed) == 2
+        and InstaPyFollowed[0] is True
+        and InstaPyFollowed[1] in ["all", "nonfollowers"]
     ):
-        unfollow_track = InstapyFollowed[1]
-        InstapyFollowed = True
+        unfollow_track = InstaPyFollowed[1]
+        InstaPyFollowed = True
     else:
-        InstapyFollowed = False
+        InstaPyFollowed = False
 
     # check URL of the webpage, if it already is the one to be navigated
     # then do not navigate to it again
@@ -234,20 +234,20 @@ def unfollow(
 
     if (
         customList is True
-        or InstapyFollowed is True
+        or InstaPyFollowed is True
         or nonFollowers is True
         or allFollowing is True
     ):
 
         if nonFollowers is True:
-            InstapyFollowed = False
+            InstaPyFollowed = False
 
         if customList is True:
             logger.info("Unfollowing from the list of pre-defined usernames\n")
             unfollow_list = customList_data
 
-        elif InstapyFollowed is True:
-            logger.info("Unfollowing the users followed by InstaPy\n")
+        elif InstaPyFollowed is True:
+            logger.info("Unfollowing the users followed by InstaPy2\n")
             unfollow_list = list(automatedFollowedPool["eligible"].keys())
 
         elif nonFollowers is True:
@@ -267,8 +267,8 @@ def unfollow(
 
         # pick only the users in the right track- ["all" or "nonfollowers"]
         # for `customList` and
-        #  `InstapyFollowed` unfollow methods
-        if customList is True or InstapyFollowed is True:
+        #  `InstaPyFollowed` unfollow methods
+        if customList is True or InstaPyFollowed is True:
             if unfollow_track == "nonfollowers":
                 all_followers = get_followers(
                     browser,
@@ -321,7 +321,7 @@ def unfollow(
                 )
             )
 
-        elif InstapyFollowed is True:
+        elif InstaPyFollowed is True:
             non_eligible = [
                 user
                 for user in automatedFollowedPool["all"].keys()

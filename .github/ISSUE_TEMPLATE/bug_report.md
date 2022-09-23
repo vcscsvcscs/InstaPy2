@@ -29,6 +29,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Script**
 A username and password redacted (removed) version of the script used when running.
+- Version [e.g. 0.6.19]
 
 **Additional context**
 Add any other context about the problem here.

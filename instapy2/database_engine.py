@@ -134,7 +134,7 @@ def validate_database_address():
     if not address.endswith(".db"):
         slash = "\\" if "\\" in address else "/"
         address = address if address.endswith(slash) else address + slash
-        address += "instapy.db"
+        address += "instapy2.db"
         Settings.database_location = address
     verify_database_directories(address)
     return address

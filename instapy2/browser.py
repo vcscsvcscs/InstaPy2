@@ -10,7 +10,7 @@ from selenium.webdriver.firefox.options import Options as Firefox_Options
 from selenium.webdriver import Remote
 from webdriverdownloader import GeckoDriverDownloader
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .util import interruption_handler
 from .util import highlight_print
 from .util import emergency_exit

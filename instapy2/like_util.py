@@ -12,9 +12,9 @@ from selenium.common.exceptions import (
 )
 from selenium.webdriver.common.by import By
 
-from instapy import browser
+from instapy2 import browser
 
-# import InstaPy modules
+# import InstaPy2 modules
 from .comment_util import open_comment_section
 from .constants import (
     MEDIA_ALL_TYPES,
@@ -910,11 +910,11 @@ def get_links(browser, page, logger, media, element):
     except BaseException as e:
         logger.error("link_elems error \n\t{}".format(str(e).encode("utf-8")))
 
-    # This block is intended to provide more information to the InstaPy user, they would like to
+    # This block is intended to provide more information to the InstaPy2 user, they would like to
     # know why the Links cannot be "[Un]Liked", I would like to say that first check if the Media
     # Type is new, second check if the xpath has been updated and finally verify the acct is not
     # under a cold-down stage.
-    # If the user can use the link outside InstaPy, they would know IG targeted the acct as
+    # If the user can use the link outside InstaPy2, they would know IG targeted the acct as
     # automated.
     for i, link in enumerate(links):
         logger.info("Links retrieved:: [{}/{}]".format(i + 1, link))
