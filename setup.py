@@ -11,8 +11,8 @@ from io import open as io_open
 import re
 
 
-summary = "Tool for automated Instagram interactions"
-project_homepage = "https://github.com/InstaPy/InstaPy"
+summary = "Automation script for Instagram that farms comments, follows and likes."
+project_homepage = "https://github.com/official-antique/InstaPy2"
 here = path.abspath(path.dirname(__file__))
 
 
@@ -26,33 +26,28 @@ with open("requirements.txt") as f:
 
 documentation = readall("README.md")
 metadata = dict(
-    re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall("instapy", "__init__.py"))
+    re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall("instapy2", "__init__.py"))
 )
 
 setup(
-    name="instapy",
+    name="instapy2",
     version=metadata["version"],
     description=summary,
     long_description=documentation,
     long_description_content_type="text/markdown",
-    author="Tim Großmann",
-    author_email="contact.timgrossmann@gmail.com",
-    maintainer="InstaPy Community at Github",
+    author="Antique",
+    author_email="official.antique@gmail.com",
+    maintainer="Antique",
     license="GPLv3",
     url=project_homepage,
-    download_url=(project_homepage + "/archive/master.zip"),
+    download_url=(project_homepage + "/archive/main.zip"),
     project_urls={
-        "How Tos": (project_homepage + "/tree/master/docs"),
-        "Examples": (project_homepage + "/tree/master/quickstart_templates"),
-        "Bug Reports": (project_homepage + "/issues"),
-        "Funding": "https://www.paypal.me/supportInstaPy",
-        "Say Thanks!": "http://saythanks.io/to/uluQulu",
-        "Source": (project_homepage + "/tree/master/instapy"),
+        "Bug Reports": (project_homepage + "/issues")
     },
-    packages=["instapy"],
+    packages=["instapy2"],
     # include_package_data=True,  # <- packs every data file in the package
     package_data={  # we need only the files below:
-        "instapy": [
+        "instapy2": [
             "icons/Windows/*.ico",
             "icons/Linux/*.png",
             "icons/Mac/*.icns",
@@ -61,7 +56,7 @@ setup(
         ]
     },
     keywords=(
-        "instapy python instagram automation \
+        "instapy2 python instagram automation \
          marketing promotion bot selenium"
     ),
     classifiers=[
@@ -81,17 +76,12 @@ setup(
         "Programming Language :: SQL",
         "Topic :: Utilities",
         "Topic :: Software Development :: Build Tools",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Natural Language :: English",
     ],
     install_requires=dependencies,
     extras_require={"test": ["tox", "virtualenv", "tox-venv"]},
-    python_requires=">=3.5",
+    python_requires=">=3.10",
     platforms=["win32", "linux", "linux2", "darwin"],
     zip_safe=False,
     entry_points={"console_scripts": []},
