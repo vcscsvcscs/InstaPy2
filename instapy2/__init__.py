@@ -1,7 +1,7 @@
 # flake8: noqa
 
 # __variables__ with double-quoted values will be available in setup.py
-__version__ = "0.6.19"
+__version__ = "0.6.20"
 
 from .instapy2 import InstaPy2
 from .util import smart_run

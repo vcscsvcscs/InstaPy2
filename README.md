@@ -1,3 +1,4 @@
+<img src="instapy2.png" width="40px"></img>
 # InstaPy2
 Automation script for Instagram that *farms* comments, follows and likes.
 
@@ -8,13 +9,12 @@ Automation script for Instagram that *farms* comments, follows and likes.
 [Discord](https://discord.gg/TY8pt8e5Xg)
 
 ## Changelog
-Latest version: 0.6.19
-> Ignore the commit spam, used the web version of GitHub to delete crap.
-[CHANGELOG.md](./CHANGELOG.md)
+Latest version: 0.6.19  
+[CHANGELOG.md](CHANGELOG.md)
 
 ## Documentation
 Table of contents
-- [Installing, running and updating InstaPy2](./documentation/install-run-update.md)
-  - [Installing](./documentation/install-and-run.md#installing)
-  - [Running](./documentation/install-and-run.md#running)
-  - [Updating](./documentation/install-and-run.md#updating)
+- [Installing, running and updating InstaPy2](documentation/install-run-update.md)
+  - [Installing](documentation/install-and-run.md#installing) (incomplete)
+  - [Running](documentation/install-and-run.md#running) (incomplete)
+  - [Updating](documentation/install-and-run.md#updating) (incomplete)

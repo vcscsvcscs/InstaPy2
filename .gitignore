@@ -1,2 +1,6 @@
+build/
+instapy2.egg-info/
+
+.env
 instapy2/__pycache__/*
 geckodriver.log

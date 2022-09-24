@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
 from instapy2 import InstaPy2
 from instapy2 import smart_run
+import os
+
+load_dotenv()
 
 # login credentials
-insta_username = ''
-insta_password = ''
+insta_username = os.getenv('insta_username')
+insta_password = os.getenv('insta_password')
 
 # get an InstaPy2 session!
 # set headless_browser=True to run InstaPy2 in the background

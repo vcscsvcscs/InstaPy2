@@ -257,6 +257,7 @@ def get_links_for_location(
     return links[:amount]
 
 
+import json
 def get_links_for_tag(browser, tag, amount, skip_top_posts, randomize, media, logger):
     """
     Fetches the number of links specified by amount and returns a list of links
@@ -274,159 +275,15 @@ def get_links_for_tag(browser, tag, amount, skip_top_posts, randomize, media, lo
 
     tag = tag[1:] if tag[:1] == "#" else tag
 
-    tag_link = "https://www.instagram.com/explore/tags/{}".format(tag)
+    tag_link = "view-source:https://www.instagram.com/explore/tags/{}?__a=1&__d=dis".format(tag)
+    browser
     web_address_navigator(browser, tag_link)
 
-    top_elements = browser.find_element(
-        By.XPATH, read_xpath(get_links_for_tag.__name__, "top_elements")
-    )
-    top_posts = top_elements.find_elements(By.TAG_NAME, "a")
-    sleep(1)
+    pre = browser.find_element(By.TAG_NAME, 'pre').text
+    data = json.loads(pre)
 
-    if skip_top_posts:
-        main_elem = browser.find_element(
-            By.XPATH, read_xpath(get_links_for_tag.__name__, "main_elem")
-        )
-    else:
-        main_elem = browser.find_element(By.TAG_NAME, "main")
-    link_elems = main_elem.find_elements(By.TAG_NAME, "a")
-    sleep(1)
-
-    if not link_elems:  # this tag does not have `Top Posts` or it really is
-        # empty..
-        main_elem = browser.find_element(
-            By.XPATH, read_xpath(get_links_for_tag.__name__, "top_elements")
-        )
-        top_posts = []
-    sleep(2)
-
-    web_address_navigator(browser, f'view-source:{tag_link}?__a=1&__d=dis')
-    try:
-        possible_posts = get_shared_data(browser)['data']['media_count']
-
-    except WebDriverException:
-        web_address_navigator(browser, tag_link)
-        try:
-            possible_posts = browser.find_element(
-                By.XPATH, read_xpath(get_links_for_tag.__name__, "possible_post")
-            ).text
-            if possible_posts:
-                possible_posts = format_number(possible_posts)
-
-            else:
-                logger.info(
-                    "Failed to get the amount of possible posts in '{}' tag  "
-                    "~empty string".format(tag)
-                )
-                possible_posts = None
-
-        except NoSuchElementException:
-            logger.info(
-                "Failed to get the amount of possible posts in {} tag".format(tag)
-            )
-            possible_posts = None
-
-    if skip_top_posts:
-        amount = amount + 9
-
-    logger.info(
-        "desired amount: {}  |  top posts [{}]: {}  |  possible posts: "
-        "{}".format(
-            amount,
-            "enabled" if not skip_top_posts else "disabled",
-            len(top_posts),
-            possible_posts,
-        )
-    )
-
-    if possible_posts is not None:
-        amount = possible_posts if amount > possible_posts else amount
-    # sometimes pages do not have the correct amount of posts as it is
-    # written there, it may be cos of some posts is deleted but still keeps
-    # counted for the tag
-
-    # Get links
-    links = get_links(browser, tag, logger, media, main_elem)
-    filtered_links = len(links)
-    try_again = 0
-    sc_rolled = 0
-    nap = 1.5
-    put_sleep = 0
-    try:
-        while filtered_links in range(1, amount):
-            if sc_rolled > 100:
-                logger.info("Scrolled too much! ~ sleeping a bit :>")
-                sleep(600)
-                sc_rolled = 0
-
-            for i in range(3):
-                browser.execute_script(
-                    "window.scrollTo(0, document.body.scrollHeight);"
-                )
-                update_activity(browser, state=None)
-                sc_rolled += 1
-                sleep(nap)  # if not slept, and internet speed is low,
-                # instagram will only scroll one time, instead of many times
-                # you sent scroll command...
-
-            sleep(3)
-            links.extend(get_links(browser, tag, logger, media, main_elem))
-
-            links_all = links  # uniqify links while preserving order
-            s = set()
-            links = []
-            for i in links_all:
-                if i not in s:
-                    s.add(i)
-                    links.append(i)
-
-            if len(links) == filtered_links:
-                try_again += 1
-                nap = 3 if try_again == 1 else 5
-                logger.info(
-                    "Insufficient amount of links ~ trying again: {}".format(try_again)
-                )
-                sleep(3)
-
-                if try_again > 2:  # you can try again as much as you want
-                    # by changing this number
-                    if put_sleep < 1 and filtered_links <= 21:
-                        logger.info(
-                            "Cor! Did you send too many requests?  ~let's rest some"
-                        )
-                        sleep(600)
-                        put_sleep += 1
-
-                        browser.execute_script("location.reload()")
-                        update_activity(browser, state=None)
-                        try_again = 0
-                        sleep(10)
-
-                        main_elem = get_main_element(
-                            browser, link_elems, skip_top_posts
-                        )
-                    else:
-                        logger.info(
-                            "'{}' tag POSSIBLY has less images than "
-                            "desired:{} found:{}...".format(tag, amount, len(links))
-                        )
-                        break
-            else:
-                filtered_links = len(links)
-                try_again = 0
-                nap = 1.5
-    except Exception:
-        raise
-
-    sleep(4)
-
-    if skip_top_posts:
-        del links[0:9]
-
-    if randomize is True:
-        random.shuffle(links)
-
-    return links[:amount]
+    # TODO: Possible replace the code above with *requests* as Selenium does not support request headers
+    # Request headers will be needed from now on as we need to set the *max_id* (page number).
 
 
 def get_links_for_username(
