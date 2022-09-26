@@ -1,4 +1,5 @@
 .env
+.vscode
 settings.json
 
 instapy2/__pycache__

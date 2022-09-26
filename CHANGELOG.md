@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.1.1] - 2022-09-27
+### Added
+- Added basic *like_by_tags* functionality with support for skipping posts containing hashtags or phrases.
+    - Users can also limit likes to posts with a current like count between a given range (only like if post currently has between 0-100 likes).
+- Added Pillow requirement to [requirements.txt](requirements.txt)
+
 ## [0.0.1] - 2022-09-26
 ### Added
 - Added *like_by_tags* with **very** limited functionality.
