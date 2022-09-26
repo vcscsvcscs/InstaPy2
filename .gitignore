@@ -1,6 +1,4 @@
-build/
-instapy2.egg-info/
-
 .env
-instapy2/__pycache__/*
-geckodriver.log
+settings.json
+
+instapy2/__pycache__
