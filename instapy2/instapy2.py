@@ -2,10 +2,10 @@ from .comment_util import CommentUtil
 from .database import InstaPy2DB
 from .like_util import LikeUtil
 from .media_type import MediaType
+from .media_util import MediaUtil
 
-from emoji import demojize, emojize
 from instagrapi.types import Media
-from random import choice, randint, random, shuffle
+from random import shuffle
 
 import instagrapi, os
 
@@ -66,34 +66,21 @@ class InstaPy2:
             print(f'Found: {len(medias)} {total} for {tag}')
 
             for index, media in enumerate(iterable=medias):
-                if self.like_util.media_contains_friend(media=media, usernames=self.friends_to_skip):
-                    print('[ERROR]: Media does contain a friend from the provided list. Skipping.')
-                    pass
-                else:
-                    if self.like_util.media_contains_mandatory_hashtags_or_phrases(media=media, hashtags_or_phrases=self.mandatory_hashtags_or_phrases):
-                        if self.like_util.media_contains_hashtags_or_phrases_to_skip(media=media, hashtags_or_phrases=self.hashtags_or_phrases_to_skip):
-                            print('[ERROR]: Media does contain a hashtag or phrase to skip. Skipping.')
-                            pass
+                passes_all_checks, log = MediaUtil(usernames=self.friends_to_skip, mandatory_hashtags_or_phrases=self.mandatory_hashtags_or_phrases, hashtags_or_phrases_to_skip=self.hashtags_or_phrases_to_skip).media_passes_all_checks(media=media, comment_util=self.comment_util, like_util=self.like_util)
+                print(log)
+                if passes_all_checks:
+                    did_like = self.like_util.like_media(media=media)
+
+                    print(f'[INFO]: Successfully liked media: {media.code}' if did_like else f'[ERROR]: Failed to like media: {media.code}')
+
+                    if did_like or self.can_comment_on_liked_media:
+                        if not self.comment_util.has_commented_on_media(media=media) and self.can_comment:
+                            if self.comment_util.media_contains_mandatory_words(media=media, words=self.commenting_mandatory_words):
+                                comment = self.comment_util.get_comment_from_comments(comments=self.comments).format(media.user.username)
+                                print(f'[INFO]: Successfully commented on media: {media.code}' if self.comment_util.comment_on_media(media=media, comment=comment) else f'[ERROR]: Failed to comment on media: {media.code}')
                         else:
-                            print(f'[INFO]: Succesfully liked {media.code}' if self.client.media_like(media_id=media.id) else f'[ERROR]: Failed to like {media.code}')
-
-                            if self.can_comment:
-                                should_comment_on_media = (randint(0, 100) <= self.comment_percentage)
-                                print(should_comment_on_media)
-
-                                if should_comment_on_media:
-                                    if not self.comment_util.has_commented_on_media(media=media):
-                                        if self.comment_util.media_contains_mandatory_words(media=media, words=self.commenting_mandatory_words):
-                                            random_comment = choice(seq=self.comments).format(media.user.username)
-                                            random_comment = demojize(string=random_comment)
-                                            random_comment = emojize(string=random_comment)
-
-                                            print(f'[ERROR]: Failed to comment on {media.code}' if self.client.media_comment(media_id=media.id, text=random_comment) is None else f'[INFO]: Successfully commented on {media.code}')
-                                    else:
-                                        print('[ERROR]: Media has already been commented on by user. Skipping.')
-                    else:
-                        print('[ERROR]: Media does not contain a mandatory hashtag or phrase. Skipping.')
-                        pass
+                            print('[ERROR]: Media has already been commented on.')
+                
     
     
     # start configurations

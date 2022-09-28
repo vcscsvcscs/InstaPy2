@@ -1,4 +1,4 @@
-version = '0.0.1.1'
+version = '0.0.1.3'
 
 # somehow fixes a stupid relative module import error?
 from .instapy2 import InstaPy2

@@ -6,10 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.1.3] - 2022-09-28
+### Added
+- Added support for *comment_on_liked_media*.
+    - Setting *comment_on_liked_media* to *True* will enable commenting for currently parsed and liked media.
+    - Media that is not liked will not receive a comment.
+        - This will be improved so users can comment on unliked media at a later date.
+
+### Changed
+- Created a better *media_passes_all_checks* function to check whether media can be interacted with.
+- Moved some functions from [instapy2.py](instapy2.py) to their respective *_util.py files.
+    - [comment_util.py](comment_util.py), [like_util.py](like_util.py), etc.
+- Changed *media_contains_mandatory_\** from *any()* to *all()*.
+    - This change was made to correspond with how InstaPy handles the same check.
+
+### Fixed
+- Fixed an issue caused by commenting out the comment and like code.
+    - InstaPy2 will now **ACTUALLY** comment and like media based on user configuration.
+
 ## [0.0.1.2] - 2022-09-27
 ### Added
 - Implemented most features of *like_by_tags*.
-    - *like_by_tags* will now comment on and like posts based on the configuration set by you, the user (see [script.py](script.py)).
+    - *like_by_tags* will now comment on and like media based on the configuration set by you, the user (see [script.py](script.py)).
 
 ### Changed
 - Improved the way InstaPy2 checks for hashtags, phrases or words within the caption text of media.
@@ -17,7 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### TODO
 - Clean up the code and move features into their respective *_util.py files.
 - Add the ability to unlike once likes, etc. from InstaPy.
-- Add 
 
 ## [0.0.1.1] - 2022-09-27
 ### Added
