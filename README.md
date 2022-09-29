@@ -21,7 +21,7 @@ Automation script for Instagram that *farms* comments, follows and likes.
 </span>
 
 ## Changelog
-Latest version: 0.0.1.2  
+Latest version: 0.0.14  
 [CHANGELOG.md](CHANGELOG.md)
 
 ## Documentation

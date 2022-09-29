@@ -1,6 +1,7 @@
+from .media_type import MediaType
+
 from instagrapi import Client
 from instagrapi.types import Media
-from .media_type import MediaType
 
 from random import shuffle
 
@@ -22,8 +23,7 @@ class LikeUtil:
             shuffle(links)
 
         return links[:amount]
-
-    # check if media is viable for interaction
+    
     def has_already_liked_media(self, media: Media = None) -> bool:
         return media.has_liked
 

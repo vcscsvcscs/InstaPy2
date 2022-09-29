@@ -20,6 +20,6 @@ class MediaUtil:
                 if like_util.media_contains_hashtags_or_phrases_to_skip(media=media, hashtags_or_phrases=self.hashtags_or_phrases_to_skip):
                     return False, '[ERROR]: MediaUtil.media_passes_all_checks: Media contains a hashtag or phrase in the skippable list.'
                 else:
-                    return True, '[INFO]: MediaUtil.media_passes_all_checks: Media passed all checks.'
+                    return True, '[INFO]: Media passed all checks.'
             else:
                 return False, '[ERROR]: MediaUtil.media_passes_all_checks: Media does not contain all hashtags or phrases from the mandatory list.'

@@ -19,5 +19,9 @@ session = InstaPy2(username=os.getenv(key='insta_username'), password=os.getenv(
 # hashtags or phrases to skip, perfect for nsfw, sex, fuck, etc.
 # session.set_hashtags_or_phrases_to_skip(tags=['ai', 'btech', 'fullstackdev'])
 
+# NEW (as of v0.0.14)
+# enable following of a user (times is unused currently).
+session.set_can_follow(enabled=True, percentage=25, times=0)
+
 # set with tags InstaPy2 will go through with the above configuration.
 session.like_by_tags(tags=['python3'], amount=5, skip_top_posts=False)

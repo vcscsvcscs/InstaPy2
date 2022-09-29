@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.14] - 2022-09-29
+### Added
+- Added support for *set_can_follow*.
+    - Users can now set whether the bot will follow a user.
+        - Configure this option with both *set_can_follow* and *set_friends_to_skip*.
+
+### Changed
+- Changed version number to conform with Semantic Versioning (x.y.z, not w.x.y.z).
+
 ## [0.0.1.3] - 2022-09-28
 ### Added
 - Added support for *comment_on_liked_media*.
