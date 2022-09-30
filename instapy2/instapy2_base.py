@@ -4,6 +4,7 @@ from .comment_util import CommentUtil
 from .database import InstaPy2DB
 from .follow_util import FollowUtil
 from .like_util import LikeUtil
+from .user_util import UserUtil
 
 import os
 
@@ -23,6 +24,7 @@ class InstaPy2Base:
         self.database = InstaPy2DB(database='database.db')
         self.follow_util = FollowUtil(session=self.client)
         self.like_util = LikeUtil(session=self.client)
+        self.user_util = UserUtil(session=self.client)
 
         self.limit_liking = False
         self.min_likes = 0

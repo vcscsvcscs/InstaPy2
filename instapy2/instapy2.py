@@ -2,7 +2,6 @@ from .instapy2_base import InstaPy2Base
 from .media_type import MediaType
 from .media_util import MediaUtil
 
-from instagrapi.types import Media
 from random import randint, shuffle
 
 class InstaPy2(InstaPy2Base):
@@ -54,3 +53,29 @@ class InstaPy2(InstaPy2Base):
 
                     # interactions
                     # incomplete
+
+    def like_by_users(self, usernames: list[str] = [], amount: int = 10, randomize: bool = False):
+        if not isinstance(usernames, list):
+            usernames = [usernames]
+
+        for username in usernames:
+            if (not self.user_util.is_profile_private(username=username) or (self.user_util.is_profile_private(username=username) and self.user_util.is_following_user(username=username))):
+                number_of_posts = self.user_util.user_media_count(username=username)
+                if number_of_posts > amount:
+                    # follow
+                    following = (randint(0, 100) <= self.follow_percentage)
+                    if (following or self.can_follow) and self.follow_util.can_follow_user(media=username, friends_to_skip=self.friends_to_skip):
+                        print(f'[INFO]: Successfully followed user: @{username}' if self.follow_util.follow_user(user=username) else f'[ERROR]: Failed to follow user: @{username}')
+                    else:
+                        print('[ERROR]: InstaPy2.like_by_users: follow_percentage does not fall within the following range.')
+
+                    # like
+                    medias = self.user_util.user_medias(username=username)
+                    if randomize:
+                        shuffle(x=medias)
+
+                    # TODO: Finish this thing
+                else:
+                    print('[ERROR]: InstaPy2.like_by_users: User does not have enough media.')
+            else:
+                print('[ERROR]: InstaPy2.like_by_users: User profile is private and we are not following them.')

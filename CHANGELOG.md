@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.15] - 2022-09-30
+### Added
+- Added basic *like_by_users* functionality with support for following.
+
+### Changed
+- Modified some existing code to use Union allowing for multiple types within a single parameter.
+
 ## [0.0.14] - 2022-09-29
 ### Added
 - Added support for *set_can_follow*.
