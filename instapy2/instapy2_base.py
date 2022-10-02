@@ -42,6 +42,11 @@ class InstaPy2Base:
         self.can_follow = False
         self.follow_percentage = 0
 
+        self.user_interact_amount = 0
+        self.user_interact_media = None
+        self.user_interact_percentage = 0
+        self.user_interact_random = False
+
         self.commenting_mandatory_words = []
         self.friends_to_skip = []
         self.hashtags_or_phrases_to_skip = []

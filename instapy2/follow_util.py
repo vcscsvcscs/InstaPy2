@@ -1,4 +1,3 @@
-from urllib.parse import uses_fragment
 from instagrapi import Client
 from instagrapi.types import Media, UserShort
 

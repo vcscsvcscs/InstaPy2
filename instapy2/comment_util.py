@@ -3,6 +3,7 @@ from instagrapi.types import Media
 
 from emoji import demojize, emojize
 from random import choice
+from typing import Union
 
 class CommentUtil:
     def __init__(self, session: Client, username: str):
@@ -13,7 +14,10 @@ class CommentUtil:
         all_comments = self.session.media_comments(media_id=media.id, amount=0)
         return any(self.username in comment.user.username for comment in all_comments)
 
-    def get_comment_from_comments(self, comments: list[str] = []) -> str:
+    def get_comment_from_comments(self, comments: list[str] = []) -> Union[None, str]:
+        if len(comments) == 0:
+            return None
+
         comment = choice(seq=comments)
 
         demoji_comment = demojize(string=comment)

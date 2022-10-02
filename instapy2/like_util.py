@@ -1,4 +1,4 @@
-from .media_type import MediaType
+from .media_product_type import MediaType
 
 from instagrapi import Client
 from instagrapi.types import Media

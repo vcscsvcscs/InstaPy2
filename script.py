@@ -11,17 +11,17 @@ session = InstaPy2(username=os.getenv(key='insta_username'), password=os.getenv(
 # session.set_friends_to_skip(usernames=[''])
 
 # enable commenting on media
-# session.set_can_comment(enabled=True, comment_on_liked_media=True, percentage=10)
+session.set_can_comment(enabled=True, comment_on_liked_media=True, percentage=90)
 
 # sets the comments to use, InstaPy2 will choose a random comment from the list, more comments means more variety.
-# session.set_comments(comments=['']) # use @{} to tag the user of the post
+# session.set_comments(comments=['learning new things every day']) # use @{} to tag the user of the post
 
 # hashtags or phrases to skip, perfect for nsfw, sex, fuck, etc.
 # session.set_hashtags_or_phrases_to_skip(tags=['ai', 'btech', 'fullstackdev'])
 
 # NEW (as of v0.0.14)
 # enable following of a user (times is unused currently).
-session.set_can_follow(enabled=True, percentage=25, times=0)
+# session.set_can_follow(enabled=True, percentage=25, times=0)
 
 # set with tags InstaPy2 will go through with the above configuration.
-session.like_by_tags(tags=['python3'], amount=5, skip_top_posts=False)
+session.like_by_tags(tags=['python3'], amount=1, skip_top_posts=True)

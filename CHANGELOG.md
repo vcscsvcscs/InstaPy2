@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.16] - 2022-10-02
+### Added
+- Finished implementation of *like_by_tags* and *like_by_users*.
+- Added new enum ProductType to differentiate from the different media types.
+
+### Changed
+- Changed the MediaType enum to match with the Instagram media type values.
+
+### Removed
+- Removed false imports that may have caused issues.
+
 ## [0.0.15] - 2022-09-30
 ### Added
 - Added basic *like_by_users* functionality with support for following.
