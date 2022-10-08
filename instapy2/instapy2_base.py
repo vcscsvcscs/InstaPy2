@@ -1,90 +1,45 @@
+from .configuration import Configuration
+
 from instagrapi import Client
+from instagrapi.types import Media
 
-from .comment_util import CommentUtil
-from .database import InstaPy2DB
-from .follow_util import FollowUtil
-from .like_util import LikeUtil
-from .user_util import UserUtil
+from typing import List
 
-import os
+import random, os
 
 class InstaPy2Base:
-    def  __init__(self, username: str = None, password: str = None):
-        working_directory = os.getcwd()
+    def __init__(self, username: str = None, password: str = None):
+        if username is None:
+            print('[ERROR]: Username has not been set.')
+            return
 
-        self.client = Client()
-        if os.path.isfile(path=f'{working_directory}/settings.json'):
-            self.client.load_settings(path=f'{working_directory}/settings.json')
+        if password is None:
+            print('[ERROR]: Password has not been set.')
+            return
+
+        self.session = Client()
+        if os.path.exists(path=os.getcwd() + '/instapy2/files/settings.json'):
+            self.session.load_settings(path=os.getcwd() + '/instapy2/files/settings.json')
+            logged_in = self.session.login(username=username, password=password)
         else:
-            self.client.login(username=username, password=password)
-            self.client.dump_settings(path=f'{working_directory}/settings.json')
+            logged_in = self.session.login(username=username, password=password)
+            self.session.dump_settings(path=os.getcwd() + '/instapy2/files/settings.json')
 
-        # utilities
-        self.comment_util = CommentUtil(session=self.client, username=username)
-        self.database = InstaPy2DB(database='database.db')
-        self.follow_util = FollowUtil(session=self.client)
-        self.like_util = LikeUtil(session=self.client)
-        self.user_util = UserUtil(session=self.client)
+        print(f'[INFO]: Successfully logged in as: {self.session.username}.' if logged_in else f'[ERROR]: Failed to log in.')
+        self.configuration = Configuration()
 
-        self.limit_liking = False
-        self.min_likes = 0
-        self.max_likes = 1000
 
-        self.comments = []
-        self.can_comment = False
-        self.can_comment_on_liked_media = False
-        self.comment_percentage = 0
-        self.limit_commenting = False
-        self.min_comments = 0
-        self.max_comments = 35
+    def medias(self, amount: int, tag: str, randomize_media: bool, skip_top: bool) -> List[Media]:
+        medias = []
+        if skip_top:
+            while len(medias) < amount:
+                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=amount) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+        else:
+            medias += [media for media in self.session.hashtag_medias_top(name=tag) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+            while len(medias) < amount:
+                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=amount - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
 
-        self.follow_times = 1
-        self.can_follow = False
-        self.follow_percentage = 0
+        if randomize_media:
+            random.shuffle(x=medias)
 
-        self.user_interact_amount = 0
-        self.user_interact_media = None
-        self.user_interact_percentage = 0
-        self.user_interact_random = False
-
-        self.commenting_mandatory_words = []
-        self.friends_to_skip = []
-        self.hashtags_or_phrases_to_skip = []
-        self.mandatory_hashtags_or_phrases = []
-
-    # configuration options
-    # main
-    def set_limit_for_liking(self, enabled: bool = False, min_likes: int = 0, max_likes: int = 1000):
-        self.limit_liking = enabled
-        self.min_likes = min_likes
-        self.max_likes = max_likes
-
-    def set_hashtags_or_phrases_to_skip(self, tags: list[str] = []):
-        self.hashtags_or_phrases_to_skip = tags
-
-    def set_mandatory_hashtags_or_phrases(self, tags: list[str] = []):
-        self.mandatory_hashtags_or_phrases = tags
-
-    # commenting
-    def set_limit_for_commenting(self, enabled: bool = False, min_comments: int = 0, max_comments: int = 35, commenting_mandatory_words: list[str] = []):
-        self.limit_commenting = enabled
-        self.min_comments = min_comments
-        self.max_comments = max_comments
-        self.commenting_mandatory_words = commenting_mandatory_words
-
-    def set_can_comment(self, enabled: bool = False, comment_on_liked_media: bool = False, percentage: int = 0):
-        self.can_comment = enabled
-        self.can_comment_on_liked_media = comment_on_liked_media
-        self.comment_percentage = percentage
-
-    def set_comments(self, comments: list[str] = []):
-        self.comments = comments
-
-    # following
-    def set_can_follow(self, enabled: bool = False, percentage: int = 0, times: int = 1):
-        self.can_follow = enabled
-        self.follow_percentage = percentage
-        self.follow_times = times
-
-    def set_friends_to_skip(self, usernames: list[str] = []):
-        self.friends_to_skip = usernames
+        return medias[:amount]

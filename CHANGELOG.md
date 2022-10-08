@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.0.17] - 2022-10-08
+> Add your settings.json file to **../InstaPy2/instapy2/files/*settings.json*** if you already have one.
+
+### Added
+- Added seperate classes for helpers and utilities to clean cluttered code.
+
+### Changed
+- Completely overhauled the way configuration is handled with `configuration.` functions.
+- Reimplemented *like_by_tags* with the new configuration handler and fixed previous related issues.
+
 ## [0.0.16] - 2022-10-02
 ### Added
 - Finished implementation of *like_by_tags* and *like_by_users*.

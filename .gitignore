@@ -3,3 +3,4 @@
 settings.json
 
 instapy2/__pycache__
+instapy2/*/__pycache__

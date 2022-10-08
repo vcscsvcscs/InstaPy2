@@ -1,27 +1,25 @@
 from dotenv import load_dotenv
-from instapy2 import InstaPy2
+from instapy2.instapy2 import InstaPy2
 
 import os
 
 load_dotenv()
 
-session = InstaPy2(username=os.getenv(key='insta_username'), password=os.getenv(key='insta_password'))
+client = InstaPy2(username=os.getenv('insta_username'), password=os.getenv('insta_password'))
 
-# skips people you add to the list, perfect for skipping friends or less than desirable people (#fuckthem).
-# session.set_friends_to_skip(usernames=[''])
+# client.configuration.comments.set_enabled(enabled=True) # enables comments
+# client.configuration.comments.set_comments(comments=['WOW {}']) # comments: WOW @username
+# client.configuration.comments.set_percentage(percentage=100) # comments on all media
 
-# enable commenting on media
-session.set_can_comment(enabled=True, comment_on_liked_media=True, percentage=90)
+# client.configuration.follows.set_enabled(enabled=True) enables following
+# client.configuration.follows.set_percentage(percentage=100) # follows all users
+# client.configuration.follows.set_times(times=1) # TODO: Add this functionality
 
-# sets the comments to use, InstaPy2 will choose a random comment from the list, more comments means more variety.
-# session.set_comments(comments=['learning new things every day']) # use @{} to tag the user of the post
+#client.media.ignore(hashtags=['ballpythoncommunity', 'javaprogramingmadeeasy']) # ignore skip(hashtags:) entirely if any in caption
+#client.media.require(hashtags=['ai', 'objectivec']) # only like if all in caption
+#client.media.skip(hashtags=['python3']) # skip if any in caption
 
-# hashtags or phrases to skip, perfect for nsfw, sex, fuck, etc.
-# session.set_hashtags_or_phrases_to_skip(tags=['ai', 'btech', 'fullstackdev'])
+# client.configuration.people.skip_friends(usernames=[]) # disables unfollowing for the usernames added
+# client.configuration.people.skip_users(usernames=[]) # disables all interaction for the usernames added
 
-# NEW (as of v0.0.14)
-# enable following of a user (times is unused currently).
-# session.set_can_follow(enabled=True, percentage=25, times=0)
-
-# set with tags InstaPy2 will go through with the above configuration.
-session.like_by_tags(tags=['python3'], amount=1, skip_top_posts=True)
+# client.like(amount=1, tags=['python3'], randomize_media=True, randomize_tags=True, skip_top=True)
