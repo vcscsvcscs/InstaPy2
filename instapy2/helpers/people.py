@@ -1,6 +1,6 @@
 from typing import List
 
-class PeopleUtility:
+class PeopleHelper:
     def __init__(self):
         self.friends_to_skip = []
         self.users_to_skip = []

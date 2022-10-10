@@ -26,10 +26,25 @@ class InstaPy2Base:
             self.session.dump_settings(path=os.getcwd() + '/instapy2/files/settings.json')
 
         print(f'[INFO]: Successfully logged in as: {self.session.username}.' if logged_in else f'[ERROR]: Failed to log in.')
-        self.configuration = Configuration()
+        self.configuration = Configuration(session=self.session)
 
 
-    def medias(self, amount: int, tag: str, randomize_media: bool, skip_top: bool) -> List[Media]:
+    def medias_location(self, amount: int, location: int, randomize_media: bool, skip_top: bool) -> List[Media]:
+        medias = []
+        if skip_top:
+            while len(medias) < amount:
+                medias += [media for media in self.session.location_medias_recent(location_pk=location) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+        else:
+            medias += [media for media in self.session.location_medias_top(location_pk=location) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+            while len(medias) < amount:
+                medias += [media for media in self.session.location_medias_recent(location_pk=location, amount=amount - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+
+        if randomize_media:
+            random.shuffle(x=medias)
+
+        return medias[:amount]
+
+    def medias_tag(self, amount: int, tag: str, randomize_media: bool, skip_top: bool) -> List[Media]:
         medias = []
         if skip_top:
             while len(medias) < amount:
