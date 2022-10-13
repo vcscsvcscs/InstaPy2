@@ -1,4 +1,3 @@
-from requests import session
 from .instapy2_base import InstaPy2Base
 
 from typing import List

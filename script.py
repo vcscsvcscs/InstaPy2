@@ -46,6 +46,11 @@ client = InstaPy2(username=os.getenv('insta_username'), password=os.getenv('inst
 # client.follow_tags(amount=10, tags=['python3'], skip_top=False)
 
 """
+    Follow Users By Usernames
+"""
+# client.follow_usernames(usernames=[])
+
+"""
     MARK: Like By Tags
 """
 # client.like(amount=1, tags=['python3'], randomize_media=True, randomize_tags=True, skip_top=True)

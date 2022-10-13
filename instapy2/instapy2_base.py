@@ -33,11 +33,11 @@ class InstaPy2Base:
         medias = []
         if skip_top:
             while len(medias) < amount:
-                medias += [media for media in self.session.location_medias_recent(location_pk=location) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+                medias += [media for media in self.session.location_medias_recent(location_pk=location, amount=amount * 2) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
         else:
             medias += [media for media in self.session.location_medias_top(location_pk=location) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
             while len(medias) < amount:
-                medias += [media for media in self.session.location_medias_recent(location_pk=location, amount=amount - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+                medias += [media for media in self.session.location_medias_recent(location_pk=location, amount=(amount * 2) - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
 
         if randomize_media:
             random.shuffle(x=medias)
@@ -48,11 +48,11 @@ class InstaPy2Base:
         medias = []
         if skip_top:
             while len(medias) < amount:
-                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=amount) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=amount * 2) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
         else:
             medias += [media for media in self.session.hashtag_medias_top(name=tag) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
             while len(medias) < amount:
-                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=amount - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
+                medias += [media for media in self.session.hashtag_medias_recent(name=tag, amount=(amount * 2) - len(medias)) if not any(username in media.user.username for username in self.configuration.people.users_to_skip)]
 
         if randomize_media:
             random.shuffle(x=medias)
