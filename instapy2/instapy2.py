@@ -34,7 +34,7 @@ class InstaPy2(InstaPy2Base):
     def follow_tags(self, amount: int = 50, tags: List[str] = [], randomize_media: bool = False, randomize_tags: bool = False, skip_top: bool = True):
         followed_count = 0
         tags = [tag.strip() for tag in tags] or []
-        
+
         if randomize_tags:
             random.shuffle(x=tags)
 
@@ -98,7 +98,7 @@ class InstaPy2(InstaPy2Base):
     # MARK: Like media by hashtag
     def like_tags(self, amount: int = 50, tags: List[str] = [], randomize_media: bool = False, randomize_tags: bool = False, skip_top: bool = True):
         tags = [tag.strip() for tag in tags] or []
-        
+
         if randomize_tags:
             random.shuffle(x=tags)
 
@@ -117,9 +117,11 @@ class InstaPy2(InstaPy2Base):
                     if liked or self.configuration.comments.enabled_for_liked_media:
                         if (self.configuration.follows.enabled and random.randint(0, 100) <= self.configuration.comments.percentage):
                             if (media.user.username not in self.configuration.people.friends_to_skip):
-                                commented = self.session.media_comment(media_id=media.id, text=random.choice(seq=self.configuration.comments.comments))
-                                print(f'[INFO]: Successfully commented on media: {media.code}' if commented is not None else f'[ERROR]: Failed to comment on media.')
-
+                                try:
+                                    commented = self.session.media_comment(media_id=media.id, text=random.choice(seq=self.configuration.comments.comments))
+                                    print(f'[INFO]: Successfully commented on media: {media.code}' if commented is not None else f'[ERROR]: Failed to comment on media.')
+                                except Exception as ex:
+                                    print(f'[ERROR]: Failed to comment on media, because exception: {ex}.')
                         user_id = self.session.user_id_from_username(username=media.user.username)
                         relationship_status = self.session.user_friendship_v1(user_id=user_id)
                         if (self.configuration.follows.enabled and random.randint(0, 100) <= self.configuration.follows.percentage) and not relationship_status.following:
